@@ -1,0 +1,119 @@
+.artist-page {
+  gap: 36px;
+}
+
+.artist-header {
+  position: relative;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  padding: 32px;
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  box-shadow: var(--shadow-regular);
+}
+
+.artist-header__visual {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-text-strong);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 55%, transparent),
+    color-mix(in srgb, var(--color-accent) 25%, transparent)
+  );
+  min-height: 200px;
+}
+
+.artist-header__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-header__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.artist-header__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
+}
+
+.artist-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+}
+
+.artist-header__bio {
+  margin: 0;
+  color: var(--color-text-muted);
+  max-width: 640px;
+}
+
+.artist-header__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.artist-header__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.artist-header__socials a {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-border) 65%, transparent);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.artist-header__socials a:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.artist-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.artist-section h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.artist-page__empty {
+  padding: 64px;
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--color-bg-elevated) 85%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 960px) {
+  .artist-header {
+    grid-template-columns: 1fr;
+  }
+}

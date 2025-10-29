@@ -1,0 +1,58 @@
+.artist-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--color-bg-elevated) 80%, transparent);
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.artist-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  box-shadow: var(--shadow-regular);
+}
+
+.artist-card__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 60%, transparent),
+    color-mix(in srgb, var(--color-accent) 20%, transparent)
+  );
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+.artist-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.artist-card__name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.artist-card__tags,
+.artist-card__debut {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}

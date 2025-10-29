@@ -1,0 +1,85 @@
+[
+  {
+    "id": "rick-astley",
+    "title": "TestMusic",
+    "artistId": "hoshi-noel",
+    "sources": {
+      "youtubeId": "dQw4w9WgXcQ"
+    }
+  },
+  {
+    "id": "hoshi-noel-luminescence",
+    "title": "Luminescence",
+    "artistId": "hoshi-noel",
+    "duration": 214,
+    "releaseDate": "2024-05-12",
+    "coverUrl": null,
+    "description": "Original song aux textures synthwave et refrains aériens.",
+    "sources": {
+      "youtubeId": "dQw4w9WgXcQ"
+    },
+    "tags": ["original", "synthwave"]
+  },
+  {
+    "id": "hoshi-noel-constellation",
+    "title": "Constellation (Cover)",
+    "artistId": "hoshi-noel",
+    "duration": 198,
+    "releaseDate": "2023-08-21",
+    "coverUrl": null,
+    "sources": {
+      "youtubeId": "YbJOTdZBX1g"
+    },
+    "tags": ["cover", "electro"]
+  },
+  {
+    "id": "elyra-murmures",
+    "title": "Murmures",
+    "artistId": "elyra",
+    "duration": 256,
+    "releaseDate": "2024-02-03",
+    "coverUrl": null,
+    "description": "Ballade lo-fi onirique enregistrée en home studio.",
+    "sources": {
+      "youtubeId": "9bZkp7q19f0"
+    },
+    "tags": ["original", "lo-fi"]
+  },
+  {
+    "id": "elyra-reverie",
+    "title": "Rêverie (Acoustic)",
+    "artistId": "elyra",
+    "duration": 221,
+    "releaseDate": "2022-11-15",
+    "coverUrl": null,
+    "sources": {
+      "youtubeId": "V-_O7nl0Ii0"
+    },
+    "tags": ["acoustic", "live"]
+  },
+  {
+    "id": "kira-lumi-solar-ride",
+    "title": "Solar Ride",
+    "artistId": "kira-lumi",
+    "duration": 203,
+    "releaseDate": "2024-07-30",
+    "coverUrl": null,
+    "description": "Original song EDM énergique pour se booster avant un stream.",
+    "sources": {
+      "youtubeId": "oHg5SJYRHA0"
+    },
+    "tags": ["edm", "original"]
+  },
+  {
+    "id": "kira-lumi-believer",
+    "title": "Believer (FR Cover)",
+    "artistId": "kira-lumi",
+    "duration": 189,
+    "releaseDate": "2021-03-18",
+    "coverUrl": null,
+    "sources": {
+      "youtubeId": "3JZ_D3ELwOQ"
+    },
+    "tags": ["cover", "anisong"]
+  }
+]

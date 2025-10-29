@@ -1,0 +1,104 @@
+.playlist-page {
+  gap: 36px;
+}
+
+.playlist-header {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  padding: 28px;
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--color-bg-elevated) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+}
+
+.playlist-header__visual {
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 55%, transparent),
+    color-mix(in srgb, var(--color-accent-strong) 45%, transparent)
+  );
+  font-size: 3rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.playlist-header__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.playlist-header__eyebrow {
+  margin: 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.playlist-header h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+.playlist-header__description {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.playlist-header__meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.playlist-header__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.playlist-header__actions button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 60%, transparent);
+  color: var(--color-text);
+}
+
+.playlist-header__actions button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.playlist-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.playlist-empty {
+  padding: 32px;
+  border-radius: 18px;
+  border: 1px dashed color-mix(in srgb, var(--color-border) 70%, transparent);
+  background: color-mix(in srgb, var(--color-bg-elevated) 80%, transparent);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .playlist-header {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .playlist-header__actions {
+    justify-content: center;
+  }
+}

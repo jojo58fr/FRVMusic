@@ -1,0 +1,44 @@
+[
+  {
+    "id": "hoshi-noel",
+    "name": "Hoshi Noël",
+    "slug": "hoshi-noel",
+    "bio": "Artiste VTuber française aux inspirations électro-pop et synthwave.",
+    "avatarUrl": null,
+    "bannerUrl": null,
+    "debutYear": 2021,
+    "tags": ["electro-pop", "synthwave"],
+    "socials": {
+      "youtube": "https://www.youtube.com/@HoshiNoel",
+      "twitter": "https://x.com/HoshiNoel"
+    }
+  },
+  {
+    "id": "elyra",
+    "name": "Elyra",
+    "slug": "elyra",
+    "bio": "Vsinger franco-japonaise, ballades planantes et ambiances lo-fi.",
+    "avatarUrl": null,
+    "bannerUrl": null,
+    "debutYear": 2020,
+    "tags": ["lo-fi", "ambient"],
+    "socials": {
+      "youtube": "https://www.youtube.com/@elyra",
+      "twitch": "https://www.twitch.tv/elyra"
+    }
+  },
+  {
+    "id": "kira-lumi",
+    "name": "Kira Lumi",
+    "slug": "kira-lumi",
+    "bio": "Chanteuse énergique, reprises anisong en français et original songs EDM.",
+    "avatarUrl": null,
+    "bannerUrl": null,
+    "debutYear": 2019,
+    "tags": ["anisong", "edm"],
+    "socials": {
+      "youtube": "https://www.youtube.com/@KiraLumi",
+      "tiktok": "https://www.tiktok.com/@kira.lumi"
+    }
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "name": "FRVMusic",
+  "short_name": "FRVMusic",
+  "description": "Bibliothèque musicale pour VTubers et Vsingers francophones.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "lang": "fr",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/FRVtubersLogo.png",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
