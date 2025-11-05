@@ -1,20 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { SyntheticEvent } from 'react';
-import ReactPlayer from 'react-player';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { useLibraryStore } from '../../stores/libraryStore';
 import { usePlayerStore } from '../../stores/playerStore';
 import { useUserStore } from '../../stores/userStore';
-import { fetchYouTubeVideo, isYouTubeApiConfigured } from '../../services/youtube';
-import type { YouTubeVideoDetails } from '../../types/youtube';
-import { formatCompactNumber } from '../../utils/formatNumber';
 import { formatTime } from '../../utils/formatTime';
+import { seekYoutube } from '../../utils/youtubeController';
 
 import './PlayerBar.scss';
 
-type YoutubeInternalPlayer = HTMLVideoElement & {
-  seekTo?: (amount: number, type?: 'seconds' | 'fraction') => void;
-};
 
 export function PlayerBar() {
   const {
@@ -44,12 +37,10 @@ export function PlayerBar() {
   const toggleFavorite = useUserStore((state) => state.toggleFavorite);
   const favorites = useUserStore((state) => state.favorites);
   const setLastTrackId = useUserStore((state) => state.setLastTrackId);
+  const youtubeEmbedMode = useUserStore((state) => state.youtubeEmbedMode);
+  const cycleYoutubeEmbedMode = useUserStore((state) => state.cycleYoutubeEmbedMode);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const youtubePlayerRef = useRef<YoutubeInternalPlayer | null>(null);
-  const [youtubeDetails, setYoutubeDetails] = useState<YouTubeVideoDetails | null>(null);
-  const [isFetchingYoutube, setIsFetchingYoutube] = useState(false);
-
   const playbackType = useMemo<'audio' | 'youtube' | null>(() => {
     if (!currentTrack) {
       return null;
@@ -62,8 +53,6 @@ export function PlayerBar() {
     }
     return null;
   }, [currentTrack]);
-
-  const isYoutubeApiAvailable = useMemo(() => isYouTubeApiConfigured(), []);
 
   useEffect(() => {
     if (!audioRef.current) {
@@ -93,40 +82,6 @@ export function PlayerBar() {
     }
     audio.volume = volume;
   }, [volume]);
-
-  useEffect(() => {
-    const youtubeId = currentTrack?.sources.youtubeId;
-    if (!youtubeId || !isYoutubeApiAvailable) {
-      setYoutubeDetails(null);
-      setIsFetchingYoutube(false);
-      return;
-    }
-
-    let cancelled = false;
-    const loadDetails = async () => {
-      setIsFetchingYoutube(true);
-      try {
-        const details = await fetchYouTubeVideo(youtubeId);
-        if (!cancelled) {
-          setYoutubeDetails(details ?? null);
-        }
-      } catch (_error) {
-        if (!cancelled) {
-          setYoutubeDetails(null);
-        }
-      } finally {
-        if (!cancelled) {
-          setIsFetchingYoutube(false);
-        }
-      }
-    };
-
-    loadDetails();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [currentTrack?.sources.youtubeId, isYoutubeApiAvailable]);
 
   useEffect(() => {
     if (!currentTrack || playbackType !== 'audio') {
@@ -208,51 +163,12 @@ export function PlayerBar() {
     }
   }, [isPlaying, playbackType, setIsPlaying]);
 
-  const seekYoutubeTo = (seconds: number) => {
-    const player = youtubePlayerRef.current;
-    if (!player) {
-      return;
-    }
-    if (typeof player.seekTo === 'function') {
-      player.seekTo(seconds, 'seconds');
-    } else {
-      player.currentTime = seconds;
-    }
-  };
-
-  const handleYouTubeReady = () => {
-    seekYoutubeTo(0);
-  };
-
-  const handleYouTubeTimeUpdate = (event: SyntheticEvent<HTMLVideoElement>) => {
-    const current = event.currentTarget.currentTime;
-    if (Number.isFinite(current)) {
-      setProgress(current);
-    }
-  };
-
-  const handleYouTubeDurationChange = (event: SyntheticEvent<HTMLVideoElement>) => {
-    const total = event.currentTarget.duration;
-    if (Number.isFinite(total)) {
-      setDuration(total);
-    }
-  };
-
-  const handleYouTubeEnded = () => {
-    playNext();
-  };
-
-  const handleYouTubeError = (error: unknown) => {
-    console.warn('[YouTube] player error', error);
-    setIsPlaying(false);
-  };
-
   const handleSeek = (value: number) => {
     setProgress(value);
     if (playbackType === 'audio' && audioRef.current) {
       audioRef.current.currentTime = value;
     } else if (playbackType === 'youtube') {
-      seekYoutubeTo(value);
+      seekYoutube(value);
     }
   };
 
@@ -266,26 +182,30 @@ export function PlayerBar() {
 
   const isYoutubeTrack = playbackType === 'youtube';
   const fav = currentTrack ? favorites.includes(currentTrack.id) : false;
-  const displayTitle =
-    (isYoutubeTrack && youtubeDetails?.channelTitle) ||
-    currentTrack?.title ||
-    'Titre indisponible';
+  const displayTitle = currentTrack?.title ?? 'Titre indisponible';
+  const artworkUrl = currentTrack?.coverUrl ?? currentArtist?.avatarUrl ?? null;
+  const artworkFallback = (currentArtist?.name ?? currentTrack?.title ?? 'FR')
+    .slice(0, 2)
+    .toUpperCase();
   const displaySubtitle = (() => {
     if (!currentTrack) {
       return '';
     }
-    if (isYoutubeTrack) {
-      if (currentTrack.title && currentTrack.title !== displayTitle) {
-        return currentTrack.title;
-      }
-      return '';
+    if (currentArtist) {
+      return currentArtist.name;
     }
-    return currentArtist ? currentArtist.name : 'Artiste inconnu';
+    return isYoutubeTrack ? 'YouTube' : 'Artiste inconnu';
   })();
-  
-  let youtubeInfoText = '';
-  if (youtubeDetails)
-    youtubeInfoText = `${formatCompactNumber(youtubeDetails?.viewCount)} vues`;
+
+  const embedModeDisplay = {
+    sidebar: { icon: 'fa-align-left', label: 'Iframe a gauche' },
+    fullscreen: { icon: 'fa-up-right-and-down-left-from-center', label: 'Plein ecran' },
+    hidden: { icon: 'fa-eye-slash', label: 'Iframe masquee' },
+    'bottom-right': { icon: 'fa-square-arrow-up-right', label: 'Bas a droite' },
+    'top-left': { icon: 'fa-square-arrow-up-left', label: 'Haut a gauche' },
+  } as const;
+  const embedModeInfo = embedModeDisplay[youtubeEmbedMode] ?? embedModeDisplay.sidebar;
+  const embedButtonTitle = `Position de la video : ${embedModeInfo.label}. Clique pour changer.`;
 
   return (
     <footer className="player-bar">
@@ -306,7 +226,11 @@ export function PlayerBar() {
         {currentTrack ? (
           <>
             <div className="player-bar__artwork" aria-hidden>
-              <span>{displayTitle.slice(0, 2).toUpperCase()}</span>
+              {artworkUrl ? (
+                <img src={artworkUrl} alt="" />
+              ) : (
+                <span>{artworkFallback}</span>
+              )}
             </div>
             <div className="player-bar__meta">
               <p className="player-bar__title">{displayTitle}</p>
@@ -325,7 +249,7 @@ export function PlayerBar() {
           </>
         ) : (
           <p className="player-bar__placeholder">
-            Sélectionne un morceau pour commencer la lecture.
+            Selectionne un morceau pour commencer la lecture.
           </p>
         )}
       </div>
@@ -336,7 +260,7 @@ export function PlayerBar() {
             type="button"
             onClick={playPrevious}
             disabled={!currentTrack}
-            aria-label="Morceau précédent"
+            aria-label="Morceau precedent"
           >
             <i className="fa-solid fa-backward-step" aria-hidden />
           </button>
@@ -383,25 +307,15 @@ export function PlayerBar() {
             onChange={(event) => handleVolume(Number(event.target.value))}
           />
         </div>
-        {isYoutubeApiAvailable &&
-          (youtubeDetails ? (
-            <span
-              className="player-bar__youtube-info"
-              title={youtubeInfoText ?? undefined}
-              aria-label={youtubeInfoText ?? 'Informations YouTube'}
-            >
-              <i className="fa-solid fa-circle-info" aria-hidden />
-            </span>
-          ) : (
-            isFetchingYoutube && (
-              <span
-                className="player-bar__youtube-info player-bar__youtube-info--loading"
-                aria-live="polite"
-              >
-                <i className="fa-solid fa-spinner fa-spin" aria-hidden />
-              </span>
-            )
-          ))}
+        <button
+          type="button"
+          className="player-bar__embed-toggle"
+          onClick={cycleYoutubeEmbedMode}
+          title={embedButtonTitle}
+          aria-label={`Changer la position de la video YouTube (${embedModeInfo.label})`}
+        >
+          <i className={`fa-solid ${embedModeInfo.icon}`} aria-hidden />
+        </button>
         {currentTrack?.sources.youtubeId && (
           <a
             className="player-bar__open"
@@ -414,27 +328,6 @@ export function PlayerBar() {
         )}
       </div>
 
-      {currentTrack?.sources.youtubeId && (
-        <div className="player-bar__youtube">
-          <ReactPlayer
-            ref={youtubePlayerRef}
-            src={`https://www.youtube.com/watch?v=${currentTrack.sources.youtubeId}`}
-            playing={playbackType === 'youtube' ? isPlaying : false}
-            volume={volume}
-            muted={volume === 0}
-            controls={false}
-            playsInline
-            onReady={handleYouTubeReady}
-            onTimeUpdate={handleYouTubeTimeUpdate}
-            onDurationChange={handleYouTubeDurationChange}
-            onEnded={handleYouTubeEnded}
-            onError={handleYouTubeError}
-            width={0}
-            height={0}
-            style={{ display: 'none' }}
-          />
-        </div>
-      )}
     </footer>
   );
 }

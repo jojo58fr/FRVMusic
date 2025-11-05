@@ -65,10 +65,10 @@ export function TrackList({
     }
 
     const promptMessage = [
-      'Ajouter à quelle playlist ?',
+      'Ajouter a quelle playlist ?',
       ...playlistArray.map((playlist, index) => `${index + 1}. ${playlist.name}`),
       '',
-      'Tape un numéro existant ou un nouveau nom pour créer une playlist.',
+      'Tape un numero existant ou un nouveau nom pour creer une playlist.',
     ].join('\n');
 
     const answer = window.prompt(promptMessage);
@@ -89,9 +89,12 @@ export function TrackList({
 
   return (
     <div className={`track-list${compact ? ' track-list--compact' : ''}`}>
-      {tracks.map((track, index) => {
+      {tracks.map((track) => {
         const artist = artistsById[track.artistId];
         const fav = isFavorite(track.id);
+        const coverUrl = track.coverUrl ?? artist?.avatarUrl ?? undefined;
+        const placeholder = (artist?.name ?? track.title).slice(0, 2).toUpperCase();
+
         return (
           <div
             className="track-list__row"
@@ -101,7 +104,13 @@ export function TrackList({
             role="button"
             tabIndex={0}
           >
-            <span className="track-list__index">{index + 1}</span>
+            <div className="track-list__thumb" aria-hidden>
+              {coverUrl ? (
+                <img src={coverUrl} alt="" loading="lazy" />
+              ) : (
+                <span>{placeholder}</span>
+              )}
+            </div>
             <div className="track-list__main">
               <p className="track-list__title">{track.title}</p>
               {showArtist && artist && (
@@ -114,7 +123,7 @@ export function TrackList({
                 </Link>
               )}
               {track.tags && track.tags.length > 0 && (
-                <p className="track-list__tags">{track.tags.slice(0, 3).join(' · ')}</p>
+                <p className="track-list__tags">{track.tags.slice(0, 3).join(' - ')}</p>
               )}
             </div>
             <div className="track-list__meta">
@@ -132,9 +141,9 @@ export function TrackList({
                   type="button"
                   className="track-list__add"
                   onClick={(event) => handleAddToPlaylist(event, track.id)}
-                  aria-label="Ajouter à une playlist"
+                  aria-label="Ajouter a une playlist"
                 >
-                  <i className={`fa-solid fa-plus`} aria-hidden />
+                  <i className="fa-solid fa-plus" aria-hidden />
                 </button>
                 {onRemoveTrack && (
                   <button
@@ -147,7 +156,7 @@ export function TrackList({
                     }}
                     aria-label="Retirer de la playlist"
                   >
-                    <i className={`fa-solid fa-close`} aria-hidden />
+                    <i className="fa-solid fa-close" aria-hidden />
                   </button>
                 )}
               </div>

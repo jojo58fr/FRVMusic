@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/FRVtubers_Vmusic.png';
 
 import { FAVORITES_PLAYLIST_ID, useUserStore } from '../../stores/userStore';
+import { SidebarYoutubeEmbed } from './YoutubeEmbed';
 
 import './Sidebar.scss';
 
@@ -111,6 +112,7 @@ export function Sidebar() {
           </ul>
         )}
       </div>
+      <SidebarYoutubeEmbed />
     </div>
   );
 }

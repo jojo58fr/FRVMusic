@@ -22,7 +22,7 @@ export function HomePage() {
       .slice(-4)
       .reverse()
       .map((trackId) => tracksById[trackId])
-      .filter((track) => track !== undefined);
+      .filter((track): track is NonNullable<typeof track> => track !== undefined);
   }, [favorites, tracksById]);
 
   const trendingTracks = useMemo(() => tracks.slice(0, 5), [tracks]);
@@ -39,7 +39,8 @@ export function HomePage() {
           </p>
           {featuredTrack && (
             <div className="home-hero__cta">
-              <button className="home-hero__cta_1 primary"
+              <button
+                className="home-hero__cta_1 primary"
                 type="button"
                 onClick={() =>
                   playTrack(
@@ -48,19 +49,18 @@ export function HomePage() {
                   )
                 }
               >
-                🎲 Écoute aléatoire
+                Lecture aléatoire
               </button>
-              <button className="home-hero__cta_1 secondary"
+              <button
+                className="home-hero__cta_1 secondary"
                 type="button"
-                onClick={() =>
-                  {
-                    window.open('https://www.patreon.com/c/TakuDev', '_blank', 'noopener,noreferrer')
-                  }
-                }
+                onClick={() => {
+                  window.open('https://www.patreon.com/c/TakuDev', '_blank', 'noopener,noreferrer');
+                }}
               >
                 Supporte le projet
               </button>
-              <Link to="/search">Explorer la bibliothèque →</Link>
+              <Link to="/search">Explorer la bibliothèque &gt;</Link>
             </div>
           )}
         </div>

@@ -25,16 +25,30 @@
 }
 
 .player-bar__artwork {
-  width: 64px;
+  //width: 64px;
+  aspect-ratio: 16/9;
   height: 64px;
   border-radius: 16px;
-  background: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 30%, transparent));
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 80%, transparent),
+    color-mix(in srgb, var(--color-accent) 35%, transparent)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 1.1rem;
   color: var(--color-text-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.player-bar__artwork img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .player-bar__meta {
@@ -183,28 +197,29 @@
   width: 140px;
 }
 
-.player-bar__youtube-info {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
-  display: grid;
-  place-items: center;
-  font-size: 0.75rem;
+.player-bar__embed-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-bg) 65%, transparent);
   color: var(--color-text-muted);
-  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
-  transition: border-color 0.2s ease, color 0.2s ease;
-  cursor: default;
-  margin-left: auto;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  font-size: 0.95rem;
 }
 
-.player-bar__youtube-info:hover {
-  border-color: var(--color-accent);
+.player-bar__embed-toggle:hover {
   color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 15%, transparent);
 }
 
-.player-bar__youtube-info--loading {
-  border-style: dashed;
+.player-bar__embed-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .player-bar__open {
@@ -215,15 +230,6 @@
 
 .player-bar__open:hover {
   color: var(--color-accent-strong);
-}
-
-.player-bar__youtube {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  height: 0;
-  width: 0;
 }
 
 @media (max-width: 1024px) {

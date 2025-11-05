@@ -41,7 +41,7 @@ export function ArtistPage() {
       <div className="page artist-page">
         <div className="artist-page__empty">
           <h1>Artiste introuvable</h1>
-          <p>Impossible de trouver cet artiste dans la bibliothèque locale.</p>
+          <p>Impossible de trouver cet artiste dans la bibliothèque.</p>
         </div>
       </div>
     );
@@ -64,14 +64,14 @@ export function ArtistPage() {
           <div className="artist-header__meta">
             {artist.debutYear && <span>Actif depuis {artist.debutYear}</span>}
             {artist.tags && artist.tags.length > 0 && (
-              <span>{artist.tags.slice(0, 3).join(' · ')}</span>
+              <span>{artist.tags.slice(0, 3).join(' - ')}</span>
             )}
           </div>
           {socials.length > 0 && (
             <div className="artist-header__socials">
               {socials.map((social) => (
                 <a key={social.key} href={social.url} target="_blank" rel="noreferrer">
-                  ↗ {social.label}
+                  &gt; {social.label}
                 </a>
               ))}
             </div>

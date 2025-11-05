@@ -4,6 +4,15 @@ import { persist } from 'zustand/middleware';
 import type { Playlist } from '../types/library';
 
 export type ThemeMode = 'light' | 'dark';
+export type YoutubeEmbedMode = 'sidebar' | 'fullscreen' | 'hidden' | 'bottom-right' | 'top-left';
+
+const YOUTUBE_EMBED_MODES: YoutubeEmbedMode[] = [
+  'sidebar',
+  'fullscreen',
+  'hidden',
+  'bottom-right',
+  'top-left',
+];
 
 interface UserState {
   favorites: string[];
@@ -11,6 +20,8 @@ interface UserState {
   theme: ThemeMode;
   volume: number;
   lastTrackId?: string;
+  youtubeEmbedMode: YoutubeEmbedMode;
+  isFullscreenBackground: boolean;
   toggleFavorite: (trackId: string) => void;
   isFavorite: (trackId: string) => boolean;
   createPlaylist: (name: string, description?: string) => Playlist;
@@ -23,6 +34,9 @@ interface UserState {
   toggleTheme: () => void;
   setVolume: (volume: number) => void;
   setLastTrackId: (trackId?: string) => void;
+  setYoutubeEmbedMode: (mode: YoutubeEmbedMode) => void;
+  cycleYoutubeEmbedMode: () => void;
+  setIsFullscreenBackground: (background: boolean) => void;
 }
 
 const nowIso = () => new Date().toISOString();
@@ -38,6 +52,7 @@ const persistConfig = {
     theme: state.theme,
     volume: state.volume,
     lastTrackId: state.lastTrackId,
+    youtubeEmbedMode: state.youtubeEmbedMode,
   }),
 };
 
@@ -49,6 +64,8 @@ export const useUserStore = create<UserState>()(
       theme: 'dark',
       volume: 0.8,
       lastTrackId: undefined,
+      youtubeEmbedMode: 'sidebar',
+      isFullscreenBackground: false,
       toggleFavorite: (trackId) => {
         set((state) => {
           const exists = state.favorites.includes(trackId);
@@ -104,10 +121,10 @@ export const useUserStore = create<UserState>()(
       },
       deletePlaylist: (playlistId) =>
         set((state) => {
-          if (!state.playlists[playlistId]) {
+          const { [playlistId]: removedPlaylist, ...rest } = state.playlists;
+          if (!removedPlaylist) {
             return state;
           }
-          const { [playlistId]: _removed, ...rest } = state.playlists;
           return { playlists: rest };
         }),
       addTrackToPlaylist: (playlistId, trackId) => {
@@ -162,6 +179,17 @@ export const useUserStore = create<UserState>()(
         set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
       setVolume: (volume) => set({ volume: Math.min(1, Math.max(0, volume)) }),
       setLastTrackId: (trackId) => set({ lastTrackId: trackId }),
+      setYoutubeEmbedMode: (mode) => set({ youtubeEmbedMode: mode }),
+      cycleYoutubeEmbedMode: () =>
+        set((state) => {
+          const currentIndex = YOUTUBE_EMBED_MODES.indexOf(state.youtubeEmbedMode);
+          const nextIndex =
+            currentIndex === -1
+              ? 0
+              : (currentIndex + 1) % YOUTUBE_EMBED_MODES.length;
+          return { youtubeEmbedMode: YOUTUBE_EMBED_MODES[nextIndex] };
+        }),
+      setIsFullscreenBackground: (background) => set({ isFullscreenBackground: background }),
     }),
     persistConfig,
   ),

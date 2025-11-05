@@ -32,6 +32,87 @@
   min-height: 0;
   overflow-y: auto;
   padding: 24px 32px 32px;
+  position: relative;
+}
+
+.app-shell__embed-dock {
+  position: relative;
+  pointer-events: none;
+  min-height: 0;
+  z-index: 5;
+
+  &.home-section {
+    margin-top: 24px;
+    padding: 0;
+  }
+
+  &--active {
+    pointer-events: auto;
+  }
+
+  &--fullscreen {
+    position: absolute;
+    top:0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+  }
+
+  &--fullscreen.home-section {
+    margin-top: 0;
+  }
+
+  &--background {
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+.app-shell__loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: min(520px, 100%);
+  padding: 48px 32px;
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  background: color-mix(in srgb, var(--color-bg-elevated) 88%, transparent);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.app-shell__loader p {
+  margin: 0;
+}
+
+.app-shell__loader--error {
+  color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
+}
+
+.app-shell__loader button {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 120ms ease;
+}
+
+.app-shell__loader button:hover {
+  background: color-mix(in srgb, currentColor 14%, transparent);
 }
 
 .app-shell__player {
@@ -40,6 +121,25 @@
   background: var(--color-bg-elevated);
   backdrop-filter: blur(16px);
   box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.3);
+}
+
+.app-shell__outlet {
+  &--video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    //pointer-events: none;
+    z-index: 2;
+
+    background: rgba(0, 0, 0, 0.7);
+
+    width: 100%;
+    height: 100%;
+
+    overflow-y: scroll;
+
+    padding: 24px 32px 32px;
+  }
 }
 
 @media (max-width: 960px) {
@@ -67,3 +167,4 @@
     grid-row: 3;
   }
 }
+

@@ -10,9 +10,16 @@ import './SearchPage.scss';
 export function SearchPage() {
   const location = useLocation();
   const searchLibrary = useLibraryStore((state) => state.search);
-  const query = useMemo(() => new URLSearchParams(location.search).get('q') ?? '', [location.search]);
+  const query = useMemo(
+    () => new URLSearchParams(location.search).get('q') ?? '',
+    [location.search],
+  );
 
   const results = useMemo(() => searchLibrary(query), [query, searchLibrary]);
+  const showEmpty =
+    query.trim().length > 0 &&
+    results.artists.length === 0 &&
+    results.tracks.length === 0;
 
   return (
     <div className="page search-page">
@@ -21,11 +28,11 @@ export function SearchPage() {
         <p>
           {query
             ? `Résultats pour « ${query} »`
-            : 'Tape un nom d’artiste, de chanson ou un tag pour filtrer la bibliothèque.'}
+            : "Tape un nom d'artiste, de chanson ou un tag pour filtrer la bibliothèque."}
         </p>
       </header>
 
-      {query && results.artists.length === 0 && results.tracks.length === 0 ? (
+      {showEmpty ? (
         <div className="search-empty">
           <p>Aucun résultat pour cette recherche.</p>
           <p>Essaie avec un autre mot-clé ou explore la bibliothèque complète.</p>
